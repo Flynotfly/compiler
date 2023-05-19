@@ -3,6 +3,12 @@ from lexer import tokens
 
 
 symbol_table = {}
+semantic_errors = 0
+
+
+def add_sem_error():
+    global semantic_errors
+    semantic_errors += 1
 
 
 class Node:
@@ -59,6 +65,7 @@ def p_variabledecl(p):
     variable_name = p[2]
     if variable_name in symbol_table:
         print(f"Semantic error: Variable '{variable_name}' already declared.")
+        add_sem_error()
     else:
         symbol_table[variable_name] = p[1].value
 
@@ -78,6 +85,7 @@ def p_statement(p):
 
     if variable_name not in symbol_table:
         print(f"Semantic error: Variable '{variable_name}' is not declared.")
+        add_sem_error()
         p[0] = Node('IdEqual', [Node('ID', value=p[1]), p[3]])
     else:
         p[0] = Node('IdEqual', [Node('ID', value=p[1], type=symbol_table[variable_name]), p[3]])
@@ -86,6 +94,7 @@ def p_statement(p):
 
         if assigned_type != expression_type:
             print(f"Semantic error: Type mismatch in assignment of variable '{variable_name}'.")
+            add_sem_error()
 
 
 def p_expression_term(p):
@@ -109,6 +118,7 @@ def p_factor_id(p):
     variable_name = p[1]
     if variable_name not in symbol_table:
         print(f"Semantic error: Variable '{variable_name}' is not declared.")
+        add_sem_error()
         p[0] = Node('ID', value=p[1])
     else:
         p[0] = Node('ID', value=p[1], type=symbol_table[variable_name])
@@ -138,7 +148,9 @@ def p_expression_plus(p):
         p[0] = Node('PlusExp', [p[1], p[3]], type=p[1].type)
     else:
         print("Semantic error: Unexpected expression type")
+        add_sem_error()
         p[0] = Node('PlusExp', [p[1], p[3]])
+
 
 def p_expression_minus(p):
     'expression : expression MINUS term'
@@ -147,6 +159,7 @@ def p_expression_minus(p):
         p[0] = Node('MinusExp', [p[1], p[3]], type=p[1].type)
     else:
         print("Semantic error: Unexpected expression type")
+        add_sem_error()
         p[0] = Node('MinusExp', [p[1], p[3]])
 
 
@@ -157,6 +170,7 @@ def p_term_multiply(p):
         p[0] = Node('MultiplyFactor', [p[1], p[3]], type=p[1].type)
     else:
         print("Semantic error: Unexpected expression type")
+        add_sem_error()
         p[0] = Node('MultiplyFactor', [p[1], p[3]])
 
 
@@ -167,6 +181,7 @@ def p_term_divide(p):
         p[0] = Node('DivideFactor', [p[1], p[3]], type=p[1].type)
     else:
         print("Semantic error: Unexpected expression type")
+        add_sem_error()
         p[0] = Node('DivideFactor', [p[1], p[3]])
 
 def p_factor_paren(p):
@@ -179,6 +194,7 @@ def p_printstatement(p):
     p[0] = Node('Print', [p[3]], type=p[3].type)
     if p[3].type is None:
         print('Semantic error: Unexpected expression type in print statement')
+        add_sem_error()
 
 
 def p_error(p):
