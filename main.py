@@ -4,7 +4,9 @@ from myparser import parser
 input_code = '''
 int x;
 int y;
-bool z;'''
+bool z;
+double sd;
+'''
 
 parse_tree = parser.parse(input_code)
 

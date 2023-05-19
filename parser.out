@@ -59,17 +59,18 @@ Rule 0     S' -> program
 Rule 1     program -> decllist
 Rule 2     decllist -> decl
 Rule 3     decllist -> decllist decl
-Rule 4     decl -> variabletype ID SEMICOLON
-Rule 5     variabletype -> INT
-Rule 6     variabletype -> DOUBLE
-Rule 7     variabletype -> STRING
-Rule 8     variabletype -> BOOL
+Rule 4     decl -> variabledecl
+Rule 5     variabledecl -> variabletype ID SEMICOLON
+Rule 6     variabletype -> INT
+Rule 7     variabletype -> DOUBLE
+Rule 8     variabletype -> STRING
+Rule 9     variabletype -> BOOL
 
 Terminals, with rules where they appear
 
 AND                  : 
 ARRAY                : 
-BOOL                 : 8
+BOOL                 : 9
 BOOL_CONST           : 
 BREAK                : 
 CLASS                : 
@@ -78,7 +79,7 @@ COMMENT              :
 COMMENT_MULTI        : 
 DIM                  : 
 DIVIDE               : 
-DOUBLE               : 6
+DOUBLE               : 7
 DOUBLE_CONST         : 
 ELSE                 : 
 EQUAL                : 
@@ -87,11 +88,11 @@ EXTENDS              :
 FOR                  : 
 GREATER_EQUAL        : 
 GREATER_THAN         : 
-ID                   : 4
+ID                   : 5
 IDENTIFIER           : 
 IF                   : 
 IMPLEMENTS           : 
-INT                  : 5
+INT                  : 6
 INTERFACE            : 
 INT_CONST            : 
 LEFT_BRACE           : 
@@ -116,8 +117,8 @@ RETURN               :
 RIGHT_BRACE          : 
 RIGHT_BRACKET        : 
 RIGHT_PAREN          : 
-SEMICOLON            : 4
-STRING               : 7
+SEMICOLON            : 5
+STRING               : 8
 STRING_CONST         : 
 THIS                 : 
 TIMES                : 
@@ -130,7 +131,8 @@ Nonterminals, with rules where they appear
 decl                 : 2 3
 decllist             : 1 3
 program              : 0
-variabletype         : 4
+variabledecl         : 4
+variabletype         : 5
 
 Parsing method: LALR
 
@@ -140,21 +142,23 @@ state 0
     (1) program -> . decllist
     (2) decllist -> . decl
     (3) decllist -> . decllist decl
-    (4) decl -> . variabletype ID SEMICOLON
-    (5) variabletype -> . INT
-    (6) variabletype -> . DOUBLE
-    (7) variabletype -> . STRING
-    (8) variabletype -> . BOOL
+    (4) decl -> . variabledecl
+    (5) variabledecl -> . variabletype ID SEMICOLON
+    (6) variabletype -> . INT
+    (7) variabletype -> . DOUBLE
+    (8) variabletype -> . STRING
+    (9) variabletype -> . BOOL
 
-    INT             shift and go to state 5
-    DOUBLE          shift and go to state 6
-    STRING          shift and go to state 7
-    BOOL            shift and go to state 8
+    INT             shift and go to state 6
+    DOUBLE          shift and go to state 7
+    STRING          shift and go to state 8
+    BOOL            shift and go to state 9
 
     program                        shift and go to state 1
     decllist                       shift and go to state 2
     decl                           shift and go to state 3
-    variabletype                   shift and go to state 4
+    variabledecl                   shift and go to state 4
+    variabletype                   shift and go to state 5
 
 state 1
 
@@ -166,20 +170,22 @@ state 2
 
     (1) program -> decllist .
     (3) decllist -> decllist . decl
-    (4) decl -> . variabletype ID SEMICOLON
-    (5) variabletype -> . INT
-    (6) variabletype -> . DOUBLE
-    (7) variabletype -> . STRING
-    (8) variabletype -> . BOOL
+    (4) decl -> . variabledecl
+    (5) variabledecl -> . variabletype ID SEMICOLON
+    (6) variabletype -> . INT
+    (7) variabletype -> . DOUBLE
+    (8) variabletype -> . STRING
+    (9) variabletype -> . BOOL
 
     $end            reduce using rule 1 (program -> decllist .)
-    INT             shift and go to state 5
-    DOUBLE          shift and go to state 6
-    STRING          shift and go to state 7
-    BOOL            shift and go to state 8
+    INT             shift and go to state 6
+    DOUBLE          shift and go to state 7
+    STRING          shift and go to state 8
+    BOOL            shift and go to state 9
 
-    decl                           shift and go to state 9
-    variabletype                   shift and go to state 4
+    decl                           shift and go to state 10
+    variabledecl                   shift and go to state 4
+    variabletype                   shift and go to state 5
 
 state 3
 
@@ -194,40 +200,51 @@ state 3
 
 state 4
 
-    (4) decl -> variabletype . ID SEMICOLON
+    (4) decl -> variabledecl .
 
-    ID              shift and go to state 10
+    INT             reduce using rule 4 (decl -> variabledecl .)
+    DOUBLE          reduce using rule 4 (decl -> variabledecl .)
+    STRING          reduce using rule 4 (decl -> variabledecl .)
+    BOOL            reduce using rule 4 (decl -> variabledecl .)
+    $end            reduce using rule 4 (decl -> variabledecl .)
 
 
 state 5
 
-    (5) variabletype -> INT .
+    (5) variabledecl -> variabletype . ID SEMICOLON
 
-    ID              reduce using rule 5 (variabletype -> INT .)
+    ID              shift and go to state 11
 
 
 state 6
 
-    (6) variabletype -> DOUBLE .
+    (6) variabletype -> INT .
 
-    ID              reduce using rule 6 (variabletype -> DOUBLE .)
+    ID              reduce using rule 6 (variabletype -> INT .)
 
 
 state 7
 
-    (7) variabletype -> STRING .
+    (7) variabletype -> DOUBLE .
 
-    ID              reduce using rule 7 (variabletype -> STRING .)
+    ID              reduce using rule 7 (variabletype -> DOUBLE .)
 
 
 state 8
 
-    (8) variabletype -> BOOL .
+    (8) variabletype -> STRING .
 
-    ID              reduce using rule 8 (variabletype -> BOOL .)
+    ID              reduce using rule 8 (variabletype -> STRING .)
 
 
 state 9
+
+    (9) variabletype -> BOOL .
+
+    ID              reduce using rule 9 (variabletype -> BOOL .)
+
+
+state 10
 
     (3) decllist -> decllist decl .
 
@@ -238,20 +255,20 @@ state 9
     $end            reduce using rule 3 (decllist -> decllist decl .)
 
 
-state 10
-
-    (4) decl -> variabletype ID . SEMICOLON
-
-    SEMICOLON       shift and go to state 11
-
-
 state 11
 
-    (4) decl -> variabletype ID SEMICOLON .
+    (5) variabledecl -> variabletype ID . SEMICOLON
 
-    INT             reduce using rule 4 (decl -> variabletype ID SEMICOLON .)
-    DOUBLE          reduce using rule 4 (decl -> variabletype ID SEMICOLON .)
-    STRING          reduce using rule 4 (decl -> variabletype ID SEMICOLON .)
-    BOOL            reduce using rule 4 (decl -> variabletype ID SEMICOLON .)
-    $end            reduce using rule 4 (decl -> variabletype ID SEMICOLON .)
+    SEMICOLON       shift and go to state 12
+
+
+state 12
+
+    (5) variabledecl -> variabletype ID SEMICOLON .
+
+    INT             reduce using rule 5 (variabledecl -> variabletype ID SEMICOLON .)
+    DOUBLE          reduce using rule 5 (variabledecl -> variabletype ID SEMICOLON .)
+    STRING          reduce using rule 5 (variabledecl -> variabletype ID SEMICOLON .)
+    BOOL            reduce using rule 5 (variabledecl -> variabletype ID SEMICOLON .)
+    $end            reduce using rule 5 (variabledecl -> variabletype ID SEMICOLON .)
 

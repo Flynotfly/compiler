@@ -9,7 +9,7 @@ class Node:
         self.value = value
 
     def __str__(self):
-        if self.type == "variabletype":
+        if self.type == "VariableType":
             return self.value
 
 
@@ -22,14 +22,19 @@ def p_decllist(p):
     '''decllist : decl
                 | decllist decl'''
     if len(p) == 2:
-        p[0] = Node('decllist', [p[1]])
+        p[0] = Node('DeclList', [p[1]])
     else:
-        p[0] = Node('decllist', p[1].children + [p[2]])
+        p[0] = Node('DeclList', p[1].children + [p[2]])
 
 
 def p_decl(p):
-    'decl : variabletype ID SEMICOLON'
-    p[0] = Node('decl', [Node('variabletype', value=p[1]), Node('identifier', value=p[2])])
+    'decl : variabledecl'
+    p[0] = Node('VarDecl', [p[1]])
+
+
+def p_variabledecl(p):
+    'variabledecl : variabletype ID SEMICOLON'
+    p[0] = Node('Variable', [Node('VariableType', value=p[1]), Node('ID', value=p[2])])
 
 
 def p_variabletype(p):
@@ -37,7 +42,9 @@ def p_variabletype(p):
                     | DOUBLE
                     | STRING
                     | BOOL'''
-    p[0] = Node('variabletype', value=p[1])
+    p[0] = Node('VariableType', value=p[1])
+
+
 
 
 def p_error(p):
