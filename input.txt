@@ -1,0 +1,7 @@
+int x;
+int y;
+
+x = 3;
+y = 10;
+z = x + y;
+print(z);
