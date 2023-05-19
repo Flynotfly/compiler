@@ -8,6 +8,7 @@ y = 5 + 4;
 query = 93 * 63 - 2;
 pork = "pig";
 cake = true;
+Print("2");
 '''
 
 parse_tree = parser.parse(input_code)

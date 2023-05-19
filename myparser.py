@@ -37,6 +37,11 @@ def p_decl_statement(p):
     p[0] = Node('Statement', [p[1]])
 
 
+def p_decl_prntstmnt(p):
+    'decl : printstatement'
+    p[0] = Node('PrintStmnt', [p[1]])
+
+
 def p_variabledecl(p):
     'variabledecl : variabletype ID SEMICOLON'
     p[0] = Node('Variable', [p[1], Node('ID', value=p[2])])
@@ -107,6 +112,9 @@ def p_factor_paren(p):
     p[0] = Node('ParenExp', [p[2]])
 
 
+def p_printstatement(p):
+    'printstatement : PRINT LEFT_PAREN expression RIGHT_PAREN SEMICOLON'
+    p[0] = Node('Print', [p[3]])
 def p_error(p):
     if p:
         print(f"Syntax error at token {p.value} on line {p.lineno}")

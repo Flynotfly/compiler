@@ -32,7 +32,6 @@ Unused terminals:
     NULL
     OR
     PERIOD
-    PRINT
     READINTEGER
     READLINE
     RETURN
@@ -50,61 +49,63 @@ Rule 2     decllist -> decl
 Rule 3     decllist -> decllist decl
 Rule 4     decl -> variabledecl
 Rule 5     decl -> statement
-Rule 6     variabledecl -> variabletype ID SEMICOLON
-Rule 7     variabletype -> INT
-Rule 8     variabletype -> DOUBLE
-Rule 9     variabletype -> STRING
-Rule 10    variabletype -> BOOL
-Rule 11    statement -> ID EQUAL expression SEMICOLON
-Rule 12    expression -> term
-Rule 13    term -> factor
-Rule 14    factor -> const
-Rule 15    factor -> ID
-Rule 16    const -> INT_CONST
-Rule 17    const -> DOUBLE_CONST
-Rule 18    const -> STRING_CONST
-Rule 19    const -> BOOL_CONST
-Rule 20    expression -> expression PLUS term
-Rule 21    expression -> expression MINUS term
-Rule 22    term -> term TIMES factor
-Rule 23    term -> term DIVIDE factor
-Rule 24    factor -> LEFT_PAREN expression RIGHT_PAREN
+Rule 6     decl -> printstatement
+Rule 7     variabledecl -> variabletype ID SEMICOLON
+Rule 8     variabletype -> INT
+Rule 9     variabletype -> DOUBLE
+Rule 10    variabletype -> STRING
+Rule 11    variabletype -> BOOL
+Rule 12    statement -> ID EQUAL expression SEMICOLON
+Rule 13    expression -> term
+Rule 14    term -> factor
+Rule 15    factor -> const
+Rule 16    factor -> ID
+Rule 17    const -> INT_CONST
+Rule 18    const -> DOUBLE_CONST
+Rule 19    const -> STRING_CONST
+Rule 20    const -> BOOL_CONST
+Rule 21    expression -> expression PLUS term
+Rule 22    expression -> expression MINUS term
+Rule 23    term -> term TIMES factor
+Rule 24    term -> term DIVIDE factor
+Rule 25    factor -> LEFT_PAREN expression RIGHT_PAREN
+Rule 26    printstatement -> PRINT LEFT_PAREN expression RIGHT_PAREN SEMICOLON
 
 Terminals, with rules where they appear
 
 AND                  : 
 ARRAY                : 
-BOOL                 : 10
-BOOL_CONST           : 19
+BOOL                 : 11
+BOOL_CONST           : 20
 BREAK                : 
 CLASS                : 
 COMMA                : 
 COMMENT              : 
 COMMENT_MULTI        : 
 DIM                  : 
-DIVIDE               : 23
-DOUBLE               : 8
-DOUBLE_CONST         : 17
+DIVIDE               : 24
+DOUBLE               : 9
+DOUBLE_CONST         : 18
 ELSE                 : 
-EQUAL                : 11
+EQUAL                : 12
 EQUAL_EQUAL          : 
 EXTENDS              : 
 FOR                  : 
 GREATER_EQUAL        : 
 GREATER_THAN         : 
-ID                   : 6 11 15
+ID                   : 7 12 16
 IDENTIFIER           : 
 IF                   : 
 IMPLEMENTS           : 
-INT                  : 7
+INT                  : 8
 INTERFACE            : 
-INT_CONST            : 16
+INT_CONST            : 17
 LEFT_BRACE           : 
 LEFT_BRACKET         : 
-LEFT_PAREN           : 24
+LEFT_PAREN           : 25 26
 LESS_EQUAL           : 
 LESS_THAN            : 
-MINUS                : 21
+MINUS                : 22
 MODULO               : 
 NEW                  : 
 NEWARRAY             : 
@@ -113,35 +114,36 @@ NOT_EQUAL            :
 NULL                 : 
 OR                   : 
 PERIOD               : 
-PLUS                 : 20
-PRINT                : 
+PLUS                 : 21
+PRINT                : 26
 READINTEGER          : 
 READLINE             : 
 RETURN               : 
 RIGHT_BRACE          : 
 RIGHT_BRACKET        : 
-RIGHT_PAREN          : 24
-SEMICOLON            : 6 11
-STRING               : 9
-STRING_CONST         : 18
+RIGHT_PAREN          : 25 26
+SEMICOLON            : 7 12 26
+STRING               : 10
+STRING_CONST         : 19
 THIS                 : 
-TIMES                : 22
+TIMES                : 23
 VOID                 : 
 WHILE                : 
 error                : 
 
 Nonterminals, with rules where they appear
 
-const                : 14
+const                : 15
 decl                 : 2 3
 decllist             : 1 3
-expression           : 11 20 21 24
-factor               : 13 22 23
+expression           : 12 21 22 25 26
+factor               : 14 23 24
+printstatement       : 6
 program              : 0
 statement            : 5
-term                 : 12 20 21 22 23
+term                 : 13 21 22 23 24
 variabledecl         : 4
-variabletype         : 6
+variabletype         : 7
 
 Parsing method: LALR
 
@@ -153,25 +155,29 @@ state 0
     (3) decllist -> . decllist decl
     (4) decl -> . variabledecl
     (5) decl -> . statement
-    (6) variabledecl -> . variabletype ID SEMICOLON
-    (11) statement -> . ID EQUAL expression SEMICOLON
-    (7) variabletype -> . INT
-    (8) variabletype -> . DOUBLE
-    (9) variabletype -> . STRING
-    (10) variabletype -> . BOOL
+    (6) decl -> . printstatement
+    (7) variabledecl -> . variabletype ID SEMICOLON
+    (12) statement -> . ID EQUAL expression SEMICOLON
+    (26) printstatement -> . PRINT LEFT_PAREN expression RIGHT_PAREN SEMICOLON
+    (8) variabletype -> . INT
+    (9) variabletype -> . DOUBLE
+    (10) variabletype -> . STRING
+    (11) variabletype -> . BOOL
 
-    ID              shift and go to state 7
-    INT             shift and go to state 8
-    DOUBLE          shift and go to state 9
-    STRING          shift and go to state 10
-    BOOL            shift and go to state 11
+    ID              shift and go to state 8
+    PRINT           shift and go to state 9
+    INT             shift and go to state 10
+    DOUBLE          shift and go to state 11
+    STRING          shift and go to state 12
+    BOOL            shift and go to state 13
 
     program                        shift and go to state 1
     decllist                       shift and go to state 2
     decl                           shift and go to state 3
     variabledecl                   shift and go to state 4
     statement                      shift and go to state 5
-    variabletype                   shift and go to state 6
+    printstatement                 shift and go to state 6
+    variabletype                   shift and go to state 7
 
 state 1
 
@@ -185,30 +191,35 @@ state 2
     (3) decllist -> decllist . decl
     (4) decl -> . variabledecl
     (5) decl -> . statement
-    (6) variabledecl -> . variabletype ID SEMICOLON
-    (11) statement -> . ID EQUAL expression SEMICOLON
-    (7) variabletype -> . INT
-    (8) variabletype -> . DOUBLE
-    (9) variabletype -> . STRING
-    (10) variabletype -> . BOOL
+    (6) decl -> . printstatement
+    (7) variabledecl -> . variabletype ID SEMICOLON
+    (12) statement -> . ID EQUAL expression SEMICOLON
+    (26) printstatement -> . PRINT LEFT_PAREN expression RIGHT_PAREN SEMICOLON
+    (8) variabletype -> . INT
+    (9) variabletype -> . DOUBLE
+    (10) variabletype -> . STRING
+    (11) variabletype -> . BOOL
 
     $end            reduce using rule 1 (program -> decllist .)
-    ID              shift and go to state 7
-    INT             shift and go to state 8
-    DOUBLE          shift and go to state 9
-    STRING          shift and go to state 10
-    BOOL            shift and go to state 11
+    ID              shift and go to state 8
+    PRINT           shift and go to state 9
+    INT             shift and go to state 10
+    DOUBLE          shift and go to state 11
+    STRING          shift and go to state 12
+    BOOL            shift and go to state 13
 
-    decl                           shift and go to state 12
+    decl                           shift and go to state 14
     variabledecl                   shift and go to state 4
     statement                      shift and go to state 5
-    variabletype                   shift and go to state 6
+    printstatement                 shift and go to state 6
+    variabletype                   shift and go to state 7
 
 state 3
 
     (2) decllist -> decl .
 
     ID              reduce using rule 2 (decllist -> decl .)
+    PRINT           reduce using rule 2 (decllist -> decl .)
     INT             reduce using rule 2 (decllist -> decl .)
     DOUBLE          reduce using rule 2 (decllist -> decl .)
     STRING          reduce using rule 2 (decllist -> decl .)
@@ -221,6 +232,7 @@ state 4
     (4) decl -> variabledecl .
 
     ID              reduce using rule 4 (decl -> variabledecl .)
+    PRINT           reduce using rule 4 (decl -> variabledecl .)
     INT             reduce using rule 4 (decl -> variabledecl .)
     DOUBLE          reduce using rule 4 (decl -> variabledecl .)
     STRING          reduce using rule 4 (decl -> variabledecl .)
@@ -233,6 +245,7 @@ state 5
     (5) decl -> statement .
 
     ID              reduce using rule 5 (decl -> statement .)
+    PRINT           reduce using rule 5 (decl -> statement .)
     INT             reduce using rule 5 (decl -> statement .)
     DOUBLE          reduce using rule 5 (decl -> statement .)
     STRING          reduce using rule 5 (decl -> statement .)
@@ -242,51 +255,72 @@ state 5
 
 state 6
 
-    (6) variabledecl -> variabletype . ID SEMICOLON
+    (6) decl -> printstatement .
 
-    ID              shift and go to state 13
+    ID              reduce using rule 6 (decl -> printstatement .)
+    PRINT           reduce using rule 6 (decl -> printstatement .)
+    INT             reduce using rule 6 (decl -> printstatement .)
+    DOUBLE          reduce using rule 6 (decl -> printstatement .)
+    STRING          reduce using rule 6 (decl -> printstatement .)
+    BOOL            reduce using rule 6 (decl -> printstatement .)
+    $end            reduce using rule 6 (decl -> printstatement .)
 
 
 state 7
 
-    (11) statement -> ID . EQUAL expression SEMICOLON
+    (7) variabledecl -> variabletype . ID SEMICOLON
 
-    EQUAL           shift and go to state 14
+    ID              shift and go to state 15
 
 
 state 8
 
-    (7) variabletype -> INT .
+    (12) statement -> ID . EQUAL expression SEMICOLON
 
-    ID              reduce using rule 7 (variabletype -> INT .)
+    EQUAL           shift and go to state 16
 
 
 state 9
 
-    (8) variabletype -> DOUBLE .
+    (26) printstatement -> PRINT . LEFT_PAREN expression RIGHT_PAREN SEMICOLON
 
-    ID              reduce using rule 8 (variabletype -> DOUBLE .)
+    LEFT_PAREN      shift and go to state 17
 
 
 state 10
 
-    (9) variabletype -> STRING .
+    (8) variabletype -> INT .
 
-    ID              reduce using rule 9 (variabletype -> STRING .)
+    ID              reduce using rule 8 (variabletype -> INT .)
 
 
 state 11
 
-    (10) variabletype -> BOOL .
+    (9) variabletype -> DOUBLE .
 
-    ID              reduce using rule 10 (variabletype -> BOOL .)
+    ID              reduce using rule 9 (variabletype -> DOUBLE .)
 
 
 state 12
 
+    (10) variabletype -> STRING .
+
+    ID              reduce using rule 10 (variabletype -> STRING .)
+
+
+state 13
+
+    (11) variabletype -> BOOL .
+
+    ID              reduce using rule 11 (variabletype -> BOOL .)
+
+
+state 14
+
     (3) decllist -> decllist decl .
 
     ID              reduce using rule 3 (decllist -> decllist decl .)
+    PRINT           reduce using rule 3 (decllist -> decllist decl .)
     INT             reduce using rule 3 (decllist -> decllist decl .)
     DOUBLE          reduce using rule 3 (decllist -> decllist decl .)
     STRING          reduce using rule 3 (decllist -> decllist decl .)
@@ -294,367 +328,429 @@ state 12
     $end            reduce using rule 3 (decllist -> decllist decl .)
 
 
-state 13
-
-    (6) variabledecl -> variabletype ID . SEMICOLON
-
-    SEMICOLON       shift and go to state 15
-
-
-state 14
-
-    (11) statement -> ID EQUAL . expression SEMICOLON
-    (12) expression -> . term
-    (20) expression -> . expression PLUS term
-    (21) expression -> . expression MINUS term
-    (13) term -> . factor
-    (22) term -> . term TIMES factor
-    (23) term -> . term DIVIDE factor
-    (14) factor -> . const
-    (15) factor -> . ID
-    (24) factor -> . LEFT_PAREN expression RIGHT_PAREN
-    (16) const -> . INT_CONST
-    (17) const -> . DOUBLE_CONST
-    (18) const -> . STRING_CONST
-    (19) const -> . BOOL_CONST
-
-    ID              shift and go to state 16
-    LEFT_PAREN      shift and go to state 21
-    INT_CONST       shift and go to state 22
-    DOUBLE_CONST    shift and go to state 23
-    STRING_CONST    shift and go to state 24
-    BOOL_CONST      shift and go to state 25
-
-    expression                     shift and go to state 17
-    term                           shift and go to state 18
-    factor                         shift and go to state 19
-    const                          shift and go to state 20
-
 state 15
 
-    (6) variabledecl -> variabletype ID SEMICOLON .
+    (7) variabledecl -> variabletype ID . SEMICOLON
 
-    ID              reduce using rule 6 (variabledecl -> variabletype ID SEMICOLON .)
-    INT             reduce using rule 6 (variabledecl -> variabletype ID SEMICOLON .)
-    DOUBLE          reduce using rule 6 (variabledecl -> variabletype ID SEMICOLON .)
-    STRING          reduce using rule 6 (variabledecl -> variabletype ID SEMICOLON .)
-    BOOL            reduce using rule 6 (variabledecl -> variabletype ID SEMICOLON .)
-    $end            reduce using rule 6 (variabledecl -> variabletype ID SEMICOLON .)
+    SEMICOLON       shift and go to state 18
 
 
 state 16
 
-    (15) factor -> ID .
+    (12) statement -> ID EQUAL . expression SEMICOLON
+    (13) expression -> . term
+    (21) expression -> . expression PLUS term
+    (22) expression -> . expression MINUS term
+    (14) term -> . factor
+    (23) term -> . term TIMES factor
+    (24) term -> . term DIVIDE factor
+    (15) factor -> . const
+    (16) factor -> . ID
+    (25) factor -> . LEFT_PAREN expression RIGHT_PAREN
+    (17) const -> . INT_CONST
+    (18) const -> . DOUBLE_CONST
+    (19) const -> . STRING_CONST
+    (20) const -> . BOOL_CONST
 
-    TIMES           reduce using rule 15 (factor -> ID .)
-    DIVIDE          reduce using rule 15 (factor -> ID .)
-    SEMICOLON       reduce using rule 15 (factor -> ID .)
-    PLUS            reduce using rule 15 (factor -> ID .)
-    MINUS           reduce using rule 15 (factor -> ID .)
-    RIGHT_PAREN     reduce using rule 15 (factor -> ID .)
+    ID              shift and go to state 19
+    LEFT_PAREN      shift and go to state 24
+    INT_CONST       shift and go to state 25
+    DOUBLE_CONST    shift and go to state 26
+    STRING_CONST    shift and go to state 27
+    BOOL_CONST      shift and go to state 28
 
+    expression                     shift and go to state 20
+    term                           shift and go to state 21
+    factor                         shift and go to state 22
+    const                          shift and go to state 23
 
 state 17
 
-    (11) statement -> ID EQUAL expression . SEMICOLON
-    (20) expression -> expression . PLUS term
-    (21) expression -> expression . MINUS term
+    (26) printstatement -> PRINT LEFT_PAREN . expression RIGHT_PAREN SEMICOLON
+    (13) expression -> . term
+    (21) expression -> . expression PLUS term
+    (22) expression -> . expression MINUS term
+    (14) term -> . factor
+    (23) term -> . term TIMES factor
+    (24) term -> . term DIVIDE factor
+    (15) factor -> . const
+    (16) factor -> . ID
+    (25) factor -> . LEFT_PAREN expression RIGHT_PAREN
+    (17) const -> . INT_CONST
+    (18) const -> . DOUBLE_CONST
+    (19) const -> . STRING_CONST
+    (20) const -> . BOOL_CONST
 
-    SEMICOLON       shift and go to state 26
-    PLUS            shift and go to state 27
-    MINUS           shift and go to state 28
+    ID              shift and go to state 19
+    LEFT_PAREN      shift and go to state 24
+    INT_CONST       shift and go to state 25
+    DOUBLE_CONST    shift and go to state 26
+    STRING_CONST    shift and go to state 27
+    BOOL_CONST      shift and go to state 28
 
+    expression                     shift and go to state 29
+    term                           shift and go to state 21
+    factor                         shift and go to state 22
+    const                          shift and go to state 23
 
 state 18
 
-    (12) expression -> term .
-    (22) term -> term . TIMES factor
-    (23) term -> term . DIVIDE factor
+    (7) variabledecl -> variabletype ID SEMICOLON .
 
-    SEMICOLON       reduce using rule 12 (expression -> term .)
-    PLUS            reduce using rule 12 (expression -> term .)
-    MINUS           reduce using rule 12 (expression -> term .)
-    RIGHT_PAREN     reduce using rule 12 (expression -> term .)
-    TIMES           shift and go to state 29
-    DIVIDE          shift and go to state 30
+    ID              reduce using rule 7 (variabledecl -> variabletype ID SEMICOLON .)
+    PRINT           reduce using rule 7 (variabledecl -> variabletype ID SEMICOLON .)
+    INT             reduce using rule 7 (variabledecl -> variabletype ID SEMICOLON .)
+    DOUBLE          reduce using rule 7 (variabledecl -> variabletype ID SEMICOLON .)
+    STRING          reduce using rule 7 (variabledecl -> variabletype ID SEMICOLON .)
+    BOOL            reduce using rule 7 (variabledecl -> variabletype ID SEMICOLON .)
+    $end            reduce using rule 7 (variabledecl -> variabletype ID SEMICOLON .)
 
 
 state 19
 
-    (13) term -> factor .
+    (16) factor -> ID .
 
-    TIMES           reduce using rule 13 (term -> factor .)
-    DIVIDE          reduce using rule 13 (term -> factor .)
-    SEMICOLON       reduce using rule 13 (term -> factor .)
-    PLUS            reduce using rule 13 (term -> factor .)
-    MINUS           reduce using rule 13 (term -> factor .)
-    RIGHT_PAREN     reduce using rule 13 (term -> factor .)
+    TIMES           reduce using rule 16 (factor -> ID .)
+    DIVIDE          reduce using rule 16 (factor -> ID .)
+    SEMICOLON       reduce using rule 16 (factor -> ID .)
+    PLUS            reduce using rule 16 (factor -> ID .)
+    MINUS           reduce using rule 16 (factor -> ID .)
+    RIGHT_PAREN     reduce using rule 16 (factor -> ID .)
 
 
 state 20
 
-    (14) factor -> const .
+    (12) statement -> ID EQUAL expression . SEMICOLON
+    (21) expression -> expression . PLUS term
+    (22) expression -> expression . MINUS term
 
-    TIMES           reduce using rule 14 (factor -> const .)
-    DIVIDE          reduce using rule 14 (factor -> const .)
-    SEMICOLON       reduce using rule 14 (factor -> const .)
-    PLUS            reduce using rule 14 (factor -> const .)
-    MINUS           reduce using rule 14 (factor -> const .)
-    RIGHT_PAREN     reduce using rule 14 (factor -> const .)
+    SEMICOLON       shift and go to state 30
+    PLUS            shift and go to state 31
+    MINUS           shift and go to state 32
 
 
 state 21
 
-    (24) factor -> LEFT_PAREN . expression RIGHT_PAREN
-    (12) expression -> . term
-    (20) expression -> . expression PLUS term
-    (21) expression -> . expression MINUS term
-    (13) term -> . factor
-    (22) term -> . term TIMES factor
-    (23) term -> . term DIVIDE factor
-    (14) factor -> . const
-    (15) factor -> . ID
-    (24) factor -> . LEFT_PAREN expression RIGHT_PAREN
-    (16) const -> . INT_CONST
-    (17) const -> . DOUBLE_CONST
-    (18) const -> . STRING_CONST
-    (19) const -> . BOOL_CONST
+    (13) expression -> term .
+    (23) term -> term . TIMES factor
+    (24) term -> term . DIVIDE factor
 
-    ID              shift and go to state 16
-    LEFT_PAREN      shift and go to state 21
-    INT_CONST       shift and go to state 22
-    DOUBLE_CONST    shift and go to state 23
-    STRING_CONST    shift and go to state 24
-    BOOL_CONST      shift and go to state 25
+    SEMICOLON       reduce using rule 13 (expression -> term .)
+    PLUS            reduce using rule 13 (expression -> term .)
+    MINUS           reduce using rule 13 (expression -> term .)
+    RIGHT_PAREN     reduce using rule 13 (expression -> term .)
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 34
 
-    expression                     shift and go to state 31
-    term                           shift and go to state 18
-    factor                         shift and go to state 19
-    const                          shift and go to state 20
 
 state 22
 
-    (16) const -> INT_CONST .
+    (14) term -> factor .
 
-    TIMES           reduce using rule 16 (const -> INT_CONST .)
-    DIVIDE          reduce using rule 16 (const -> INT_CONST .)
-    SEMICOLON       reduce using rule 16 (const -> INT_CONST .)
-    PLUS            reduce using rule 16 (const -> INT_CONST .)
-    MINUS           reduce using rule 16 (const -> INT_CONST .)
-    RIGHT_PAREN     reduce using rule 16 (const -> INT_CONST .)
+    TIMES           reduce using rule 14 (term -> factor .)
+    DIVIDE          reduce using rule 14 (term -> factor .)
+    SEMICOLON       reduce using rule 14 (term -> factor .)
+    PLUS            reduce using rule 14 (term -> factor .)
+    MINUS           reduce using rule 14 (term -> factor .)
+    RIGHT_PAREN     reduce using rule 14 (term -> factor .)
 
 
 state 23
 
-    (17) const -> DOUBLE_CONST .
+    (15) factor -> const .
 
-    TIMES           reduce using rule 17 (const -> DOUBLE_CONST .)
-    DIVIDE          reduce using rule 17 (const -> DOUBLE_CONST .)
-    SEMICOLON       reduce using rule 17 (const -> DOUBLE_CONST .)
-    PLUS            reduce using rule 17 (const -> DOUBLE_CONST .)
-    MINUS           reduce using rule 17 (const -> DOUBLE_CONST .)
-    RIGHT_PAREN     reduce using rule 17 (const -> DOUBLE_CONST .)
+    TIMES           reduce using rule 15 (factor -> const .)
+    DIVIDE          reduce using rule 15 (factor -> const .)
+    SEMICOLON       reduce using rule 15 (factor -> const .)
+    PLUS            reduce using rule 15 (factor -> const .)
+    MINUS           reduce using rule 15 (factor -> const .)
+    RIGHT_PAREN     reduce using rule 15 (factor -> const .)
 
 
 state 24
 
-    (18) const -> STRING_CONST .
+    (25) factor -> LEFT_PAREN . expression RIGHT_PAREN
+    (13) expression -> . term
+    (21) expression -> . expression PLUS term
+    (22) expression -> . expression MINUS term
+    (14) term -> . factor
+    (23) term -> . term TIMES factor
+    (24) term -> . term DIVIDE factor
+    (15) factor -> . const
+    (16) factor -> . ID
+    (25) factor -> . LEFT_PAREN expression RIGHT_PAREN
+    (17) const -> . INT_CONST
+    (18) const -> . DOUBLE_CONST
+    (19) const -> . STRING_CONST
+    (20) const -> . BOOL_CONST
 
-    TIMES           reduce using rule 18 (const -> STRING_CONST .)
-    DIVIDE          reduce using rule 18 (const -> STRING_CONST .)
-    SEMICOLON       reduce using rule 18 (const -> STRING_CONST .)
-    PLUS            reduce using rule 18 (const -> STRING_CONST .)
-    MINUS           reduce using rule 18 (const -> STRING_CONST .)
-    RIGHT_PAREN     reduce using rule 18 (const -> STRING_CONST .)
+    ID              shift and go to state 19
+    LEFT_PAREN      shift and go to state 24
+    INT_CONST       shift and go to state 25
+    DOUBLE_CONST    shift and go to state 26
+    STRING_CONST    shift and go to state 27
+    BOOL_CONST      shift and go to state 28
 
+    expression                     shift and go to state 35
+    term                           shift and go to state 21
+    factor                         shift and go to state 22
+    const                          shift and go to state 23
 
 state 25
 
-    (19) const -> BOOL_CONST .
+    (17) const -> INT_CONST .
 
-    TIMES           reduce using rule 19 (const -> BOOL_CONST .)
-    DIVIDE          reduce using rule 19 (const -> BOOL_CONST .)
-    SEMICOLON       reduce using rule 19 (const -> BOOL_CONST .)
-    PLUS            reduce using rule 19 (const -> BOOL_CONST .)
-    MINUS           reduce using rule 19 (const -> BOOL_CONST .)
-    RIGHT_PAREN     reduce using rule 19 (const -> BOOL_CONST .)
+    TIMES           reduce using rule 17 (const -> INT_CONST .)
+    DIVIDE          reduce using rule 17 (const -> INT_CONST .)
+    SEMICOLON       reduce using rule 17 (const -> INT_CONST .)
+    PLUS            reduce using rule 17 (const -> INT_CONST .)
+    MINUS           reduce using rule 17 (const -> INT_CONST .)
+    RIGHT_PAREN     reduce using rule 17 (const -> INT_CONST .)
 
 
 state 26
 
-    (11) statement -> ID EQUAL expression SEMICOLON .
+    (18) const -> DOUBLE_CONST .
 
-    ID              reduce using rule 11 (statement -> ID EQUAL expression SEMICOLON .)
-    INT             reduce using rule 11 (statement -> ID EQUAL expression SEMICOLON .)
-    DOUBLE          reduce using rule 11 (statement -> ID EQUAL expression SEMICOLON .)
-    STRING          reduce using rule 11 (statement -> ID EQUAL expression SEMICOLON .)
-    BOOL            reduce using rule 11 (statement -> ID EQUAL expression SEMICOLON .)
-    $end            reduce using rule 11 (statement -> ID EQUAL expression SEMICOLON .)
+    TIMES           reduce using rule 18 (const -> DOUBLE_CONST .)
+    DIVIDE          reduce using rule 18 (const -> DOUBLE_CONST .)
+    SEMICOLON       reduce using rule 18 (const -> DOUBLE_CONST .)
+    PLUS            reduce using rule 18 (const -> DOUBLE_CONST .)
+    MINUS           reduce using rule 18 (const -> DOUBLE_CONST .)
+    RIGHT_PAREN     reduce using rule 18 (const -> DOUBLE_CONST .)
 
 
 state 27
 
-    (20) expression -> expression PLUS . term
-    (13) term -> . factor
-    (22) term -> . term TIMES factor
-    (23) term -> . term DIVIDE factor
-    (14) factor -> . const
-    (15) factor -> . ID
-    (24) factor -> . LEFT_PAREN expression RIGHT_PAREN
-    (16) const -> . INT_CONST
-    (17) const -> . DOUBLE_CONST
-    (18) const -> . STRING_CONST
-    (19) const -> . BOOL_CONST
+    (19) const -> STRING_CONST .
 
-    ID              shift and go to state 16
-    LEFT_PAREN      shift and go to state 21
-    INT_CONST       shift and go to state 22
-    DOUBLE_CONST    shift and go to state 23
-    STRING_CONST    shift and go to state 24
-    BOOL_CONST      shift and go to state 25
+    TIMES           reduce using rule 19 (const -> STRING_CONST .)
+    DIVIDE          reduce using rule 19 (const -> STRING_CONST .)
+    SEMICOLON       reduce using rule 19 (const -> STRING_CONST .)
+    PLUS            reduce using rule 19 (const -> STRING_CONST .)
+    MINUS           reduce using rule 19 (const -> STRING_CONST .)
+    RIGHT_PAREN     reduce using rule 19 (const -> STRING_CONST .)
 
-    term                           shift and go to state 32
-    factor                         shift and go to state 19
-    const                          shift and go to state 20
 
 state 28
 
-    (21) expression -> expression MINUS . term
-    (13) term -> . factor
-    (22) term -> . term TIMES factor
-    (23) term -> . term DIVIDE factor
-    (14) factor -> . const
-    (15) factor -> . ID
-    (24) factor -> . LEFT_PAREN expression RIGHT_PAREN
-    (16) const -> . INT_CONST
-    (17) const -> . DOUBLE_CONST
-    (18) const -> . STRING_CONST
-    (19) const -> . BOOL_CONST
+    (20) const -> BOOL_CONST .
 
-    ID              shift and go to state 16
-    LEFT_PAREN      shift and go to state 21
-    INT_CONST       shift and go to state 22
-    DOUBLE_CONST    shift and go to state 23
-    STRING_CONST    shift and go to state 24
-    BOOL_CONST      shift and go to state 25
+    TIMES           reduce using rule 20 (const -> BOOL_CONST .)
+    DIVIDE          reduce using rule 20 (const -> BOOL_CONST .)
+    SEMICOLON       reduce using rule 20 (const -> BOOL_CONST .)
+    PLUS            reduce using rule 20 (const -> BOOL_CONST .)
+    MINUS           reduce using rule 20 (const -> BOOL_CONST .)
+    RIGHT_PAREN     reduce using rule 20 (const -> BOOL_CONST .)
 
-    term                           shift and go to state 33
-    factor                         shift and go to state 19
-    const                          shift and go to state 20
 
 state 29
 
-    (22) term -> term TIMES . factor
-    (14) factor -> . const
-    (15) factor -> . ID
-    (24) factor -> . LEFT_PAREN expression RIGHT_PAREN
-    (16) const -> . INT_CONST
-    (17) const -> . DOUBLE_CONST
-    (18) const -> . STRING_CONST
-    (19) const -> . BOOL_CONST
+    (26) printstatement -> PRINT LEFT_PAREN expression . RIGHT_PAREN SEMICOLON
+    (21) expression -> expression . PLUS term
+    (22) expression -> expression . MINUS term
 
-    ID              shift and go to state 16
-    LEFT_PAREN      shift and go to state 21
-    INT_CONST       shift and go to state 22
-    DOUBLE_CONST    shift and go to state 23
-    STRING_CONST    shift and go to state 24
-    BOOL_CONST      shift and go to state 25
+    RIGHT_PAREN     shift and go to state 36
+    PLUS            shift and go to state 31
+    MINUS           shift and go to state 32
 
-    factor                         shift and go to state 34
-    const                          shift and go to state 20
 
 state 30
 
-    (23) term -> term DIVIDE . factor
-    (14) factor -> . const
-    (15) factor -> . ID
-    (24) factor -> . LEFT_PAREN expression RIGHT_PAREN
-    (16) const -> . INT_CONST
-    (17) const -> . DOUBLE_CONST
-    (18) const -> . STRING_CONST
-    (19) const -> . BOOL_CONST
+    (12) statement -> ID EQUAL expression SEMICOLON .
 
-    ID              shift and go to state 16
-    LEFT_PAREN      shift and go to state 21
-    INT_CONST       shift and go to state 22
-    DOUBLE_CONST    shift and go to state 23
-    STRING_CONST    shift and go to state 24
-    BOOL_CONST      shift and go to state 25
+    ID              reduce using rule 12 (statement -> ID EQUAL expression SEMICOLON .)
+    PRINT           reduce using rule 12 (statement -> ID EQUAL expression SEMICOLON .)
+    INT             reduce using rule 12 (statement -> ID EQUAL expression SEMICOLON .)
+    DOUBLE          reduce using rule 12 (statement -> ID EQUAL expression SEMICOLON .)
+    STRING          reduce using rule 12 (statement -> ID EQUAL expression SEMICOLON .)
+    BOOL            reduce using rule 12 (statement -> ID EQUAL expression SEMICOLON .)
+    $end            reduce using rule 12 (statement -> ID EQUAL expression SEMICOLON .)
 
-    factor                         shift and go to state 35
-    const                          shift and go to state 20
 
 state 31
 
-    (24) factor -> LEFT_PAREN expression . RIGHT_PAREN
-    (20) expression -> expression . PLUS term
-    (21) expression -> expression . MINUS term
+    (21) expression -> expression PLUS . term
+    (14) term -> . factor
+    (23) term -> . term TIMES factor
+    (24) term -> . term DIVIDE factor
+    (15) factor -> . const
+    (16) factor -> . ID
+    (25) factor -> . LEFT_PAREN expression RIGHT_PAREN
+    (17) const -> . INT_CONST
+    (18) const -> . DOUBLE_CONST
+    (19) const -> . STRING_CONST
+    (20) const -> . BOOL_CONST
 
-    RIGHT_PAREN     shift and go to state 36
-    PLUS            shift and go to state 27
-    MINUS           shift and go to state 28
+    ID              shift and go to state 19
+    LEFT_PAREN      shift and go to state 24
+    INT_CONST       shift and go to state 25
+    DOUBLE_CONST    shift and go to state 26
+    STRING_CONST    shift and go to state 27
+    BOOL_CONST      shift and go to state 28
 
+    term                           shift and go to state 37
+    factor                         shift and go to state 22
+    const                          shift and go to state 23
 
 state 32
 
-    (20) expression -> expression PLUS term .
-    (22) term -> term . TIMES factor
-    (23) term -> term . DIVIDE factor
+    (22) expression -> expression MINUS . term
+    (14) term -> . factor
+    (23) term -> . term TIMES factor
+    (24) term -> . term DIVIDE factor
+    (15) factor -> . const
+    (16) factor -> . ID
+    (25) factor -> . LEFT_PAREN expression RIGHT_PAREN
+    (17) const -> . INT_CONST
+    (18) const -> . DOUBLE_CONST
+    (19) const -> . STRING_CONST
+    (20) const -> . BOOL_CONST
 
-    SEMICOLON       reduce using rule 20 (expression -> expression PLUS term .)
-    PLUS            reduce using rule 20 (expression -> expression PLUS term .)
-    MINUS           reduce using rule 20 (expression -> expression PLUS term .)
-    RIGHT_PAREN     reduce using rule 20 (expression -> expression PLUS term .)
-    TIMES           shift and go to state 29
-    DIVIDE          shift and go to state 30
+    ID              shift and go to state 19
+    LEFT_PAREN      shift and go to state 24
+    INT_CONST       shift and go to state 25
+    DOUBLE_CONST    shift and go to state 26
+    STRING_CONST    shift and go to state 27
+    BOOL_CONST      shift and go to state 28
 
+    term                           shift and go to state 38
+    factor                         shift and go to state 22
+    const                          shift and go to state 23
 
 state 33
 
-    (21) expression -> expression MINUS term .
-    (22) term -> term . TIMES factor
-    (23) term -> term . DIVIDE factor
+    (23) term -> term TIMES . factor
+    (15) factor -> . const
+    (16) factor -> . ID
+    (25) factor -> . LEFT_PAREN expression RIGHT_PAREN
+    (17) const -> . INT_CONST
+    (18) const -> . DOUBLE_CONST
+    (19) const -> . STRING_CONST
+    (20) const -> . BOOL_CONST
 
-    SEMICOLON       reduce using rule 21 (expression -> expression MINUS term .)
-    PLUS            reduce using rule 21 (expression -> expression MINUS term .)
-    MINUS           reduce using rule 21 (expression -> expression MINUS term .)
-    RIGHT_PAREN     reduce using rule 21 (expression -> expression MINUS term .)
-    TIMES           shift and go to state 29
-    DIVIDE          shift and go to state 30
+    ID              shift and go to state 19
+    LEFT_PAREN      shift and go to state 24
+    INT_CONST       shift and go to state 25
+    DOUBLE_CONST    shift and go to state 26
+    STRING_CONST    shift and go to state 27
+    BOOL_CONST      shift and go to state 28
 
+    factor                         shift and go to state 39
+    const                          shift and go to state 23
 
 state 34
 
-    (22) term -> term TIMES factor .
+    (24) term -> term DIVIDE . factor
+    (15) factor -> . const
+    (16) factor -> . ID
+    (25) factor -> . LEFT_PAREN expression RIGHT_PAREN
+    (17) const -> . INT_CONST
+    (18) const -> . DOUBLE_CONST
+    (19) const -> . STRING_CONST
+    (20) const -> . BOOL_CONST
 
-    TIMES           reduce using rule 22 (term -> term TIMES factor .)
-    DIVIDE          reduce using rule 22 (term -> term TIMES factor .)
-    SEMICOLON       reduce using rule 22 (term -> term TIMES factor .)
-    PLUS            reduce using rule 22 (term -> term TIMES factor .)
-    MINUS           reduce using rule 22 (term -> term TIMES factor .)
-    RIGHT_PAREN     reduce using rule 22 (term -> term TIMES factor .)
+    ID              shift and go to state 19
+    LEFT_PAREN      shift and go to state 24
+    INT_CONST       shift and go to state 25
+    DOUBLE_CONST    shift and go to state 26
+    STRING_CONST    shift and go to state 27
+    BOOL_CONST      shift and go to state 28
 
+    factor                         shift and go to state 40
+    const                          shift and go to state 23
 
 state 35
 
-    (23) term -> term DIVIDE factor .
+    (25) factor -> LEFT_PAREN expression . RIGHT_PAREN
+    (21) expression -> expression . PLUS term
+    (22) expression -> expression . MINUS term
 
-    TIMES           reduce using rule 23 (term -> term DIVIDE factor .)
-    DIVIDE          reduce using rule 23 (term -> term DIVIDE factor .)
-    SEMICOLON       reduce using rule 23 (term -> term DIVIDE factor .)
-    PLUS            reduce using rule 23 (term -> term DIVIDE factor .)
-    MINUS           reduce using rule 23 (term -> term DIVIDE factor .)
-    RIGHT_PAREN     reduce using rule 23 (term -> term DIVIDE factor .)
+    RIGHT_PAREN     shift and go to state 41
+    PLUS            shift and go to state 31
+    MINUS           shift and go to state 32
 
 
 state 36
 
-    (24) factor -> LEFT_PAREN expression RIGHT_PAREN .
+    (26) printstatement -> PRINT LEFT_PAREN expression RIGHT_PAREN . SEMICOLON
 
-    TIMES           reduce using rule 24 (factor -> LEFT_PAREN expression RIGHT_PAREN .)
-    DIVIDE          reduce using rule 24 (factor -> LEFT_PAREN expression RIGHT_PAREN .)
-    SEMICOLON       reduce using rule 24 (factor -> LEFT_PAREN expression RIGHT_PAREN .)
-    PLUS            reduce using rule 24 (factor -> LEFT_PAREN expression RIGHT_PAREN .)
-    MINUS           reduce using rule 24 (factor -> LEFT_PAREN expression RIGHT_PAREN .)
-    RIGHT_PAREN     reduce using rule 24 (factor -> LEFT_PAREN expression RIGHT_PAREN .)
+    SEMICOLON       shift and go to state 42
+
+
+state 37
+
+    (21) expression -> expression PLUS term .
+    (23) term -> term . TIMES factor
+    (24) term -> term . DIVIDE factor
+
+    SEMICOLON       reduce using rule 21 (expression -> expression PLUS term .)
+    PLUS            reduce using rule 21 (expression -> expression PLUS term .)
+    MINUS           reduce using rule 21 (expression -> expression PLUS term .)
+    RIGHT_PAREN     reduce using rule 21 (expression -> expression PLUS term .)
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 34
+
+
+state 38
+
+    (22) expression -> expression MINUS term .
+    (23) term -> term . TIMES factor
+    (24) term -> term . DIVIDE factor
+
+    SEMICOLON       reduce using rule 22 (expression -> expression MINUS term .)
+    PLUS            reduce using rule 22 (expression -> expression MINUS term .)
+    MINUS           reduce using rule 22 (expression -> expression MINUS term .)
+    RIGHT_PAREN     reduce using rule 22 (expression -> expression MINUS term .)
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 34
+
+
+state 39
+
+    (23) term -> term TIMES factor .
+
+    TIMES           reduce using rule 23 (term -> term TIMES factor .)
+    DIVIDE          reduce using rule 23 (term -> term TIMES factor .)
+    SEMICOLON       reduce using rule 23 (term -> term TIMES factor .)
+    PLUS            reduce using rule 23 (term -> term TIMES factor .)
+    MINUS           reduce using rule 23 (term -> term TIMES factor .)
+    RIGHT_PAREN     reduce using rule 23 (term -> term TIMES factor .)
+
+
+state 40
+
+    (24) term -> term DIVIDE factor .
+
+    TIMES           reduce using rule 24 (term -> term DIVIDE factor .)
+    DIVIDE          reduce using rule 24 (term -> term DIVIDE factor .)
+    SEMICOLON       reduce using rule 24 (term -> term DIVIDE factor .)
+    PLUS            reduce using rule 24 (term -> term DIVIDE factor .)
+    MINUS           reduce using rule 24 (term -> term DIVIDE factor .)
+    RIGHT_PAREN     reduce using rule 24 (term -> term DIVIDE factor .)
+
+
+state 41
+
+    (25) factor -> LEFT_PAREN expression RIGHT_PAREN .
+
+    TIMES           reduce using rule 25 (factor -> LEFT_PAREN expression RIGHT_PAREN .)
+    DIVIDE          reduce using rule 25 (factor -> LEFT_PAREN expression RIGHT_PAREN .)
+    SEMICOLON       reduce using rule 25 (factor -> LEFT_PAREN expression RIGHT_PAREN .)
+    PLUS            reduce using rule 25 (factor -> LEFT_PAREN expression RIGHT_PAREN .)
+    MINUS           reduce using rule 25 (factor -> LEFT_PAREN expression RIGHT_PAREN .)
+    RIGHT_PAREN     reduce using rule 25 (factor -> LEFT_PAREN expression RIGHT_PAREN .)
+
+
+state 42
+
+    (26) printstatement -> PRINT LEFT_PAREN expression RIGHT_PAREN SEMICOLON .
+
+    ID              reduce using rule 26 (printstatement -> PRINT LEFT_PAREN expression RIGHT_PAREN SEMICOLON .)
+    PRINT           reduce using rule 26 (printstatement -> PRINT LEFT_PAREN expression RIGHT_PAREN SEMICOLON .)
+    INT             reduce using rule 26 (printstatement -> PRINT LEFT_PAREN expression RIGHT_PAREN SEMICOLON .)
+    DOUBLE          reduce using rule 26 (printstatement -> PRINT LEFT_PAREN expression RIGHT_PAREN SEMICOLON .)
+    STRING          reduce using rule 26 (printstatement -> PRINT LEFT_PAREN expression RIGHT_PAREN SEMICOLON .)
+    BOOL            reduce using rule 26 (printstatement -> PRINT LEFT_PAREN expression RIGHT_PAREN SEMICOLON .)
+    $end            reduce using rule 26 (printstatement -> PRINT LEFT_PAREN expression RIGHT_PAREN SEMICOLON .)
 
