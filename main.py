@@ -1,4 +1,4 @@
-from lexer import lexer
+from anytree import Node, RenderTree
 from myparser import parser
 
 input_code = '''
@@ -9,17 +9,12 @@ query = 93 * 63 - 2;
 pork = "pig";
 cake = true;
 Print("2");
+l = 93 * 34 / 24 - 43 + 2 * 4;
 '''
 
 parse_tree = parser.parse(input_code)
 
 
-def print_tree(node, level=0):
-    print('\t' * level + node.type)
-    if node.value:
-        print('\t' * (level + 1) + 'Value:', node.value)
-    for child in node.children:
-        print_tree(child, level + 1)
+for pre, _, node in RenderTree(parse_tree):
+    print(f'{pre}{node}')
 
-
-print_tree(parse_tree)

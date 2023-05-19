@@ -128,33 +128,3 @@ def t_error(t):
 import ply.lex as lex
 
 lexer = lex.lex()
-
-# TESTPATH = 'C:/Users/alter/Downloads/lexer_tests'
-#
-# import os
-#
-# def pair_files(folder_path):
-#     file_pairs = []
-#     file_names = os.listdir(folder_path)
-#     for name in file_names:
-#         if name.endswith('.frag'):
-#             pair_name = name[:-5] + '.out'
-#             if pair_name in file_names:
-#                 file_pairs.append((name, pair_name))
-#     return file_pairs
-#
-# FILEPATHS = pair_files(TESTPATH)
-#
-# for FILES in FILEPATHS:
-#     testFile = open(f'{TESTPATH}/{FILES[0]}')
-#     data = testFile.read()
-#     testFileResult = open(f'{TESTPATH}/{FILES[1]}')
-#     lexer.input(data)
-#
-#     print(f'                                       ----------{FILES[0]}----------\n')
-#     while True:
-#         tok = lexer.token()
-#         if not tok: break
-#         print ('%50s %10s' % (tok, f' |   {testFileResult.readline()[:-1]}'))
-#     print('\n                                       ----------test----------')
-#     print(data)

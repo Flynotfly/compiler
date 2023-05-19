@@ -8,9 +8,11 @@ class Node:
         self.children = children or []
         self.value = value
 
-    def __str__(self):
-        if self.type == "VariableType":
-            return self.value
+    def __repr__(self):
+        if self.value == None:
+            return f'{self.type}'
+        else:
+            return f'{self.value} ({self.type})'
 
 
 def p_program(p):
@@ -53,7 +55,6 @@ def p_variabletype(p):
                     | STRING
                     | BOOL'''
     p[0] = Node('VariableType', value=p[1])
-
 
 
 def p_statement(p):
