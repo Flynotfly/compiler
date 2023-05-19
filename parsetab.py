@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'AND ARRAY BOOL BOOL_CONST BREAK CLASS COMMA COMMENT COMMENT_MULTI DIM DIVIDE DOUBLE DOUBLE_CONST ELSE EQUAL EQUAL_EQUAL EXTENDS FOR GREATER_EQUAL GREATER_THAN ID IDENTIFIER IF IMPLEMENTS INT INTERFACE INT_CONST LEFT_BRACE LEFT_BRACKET LEFT_PAREN LESS_EQUAL LESS_THAN MINUS MODULO NEW NEWARRAY NOT NOT_EQUAL NULL OR PERIOD PLUS PRINT READINTEGER READLINE RETURN RIGHT_BRACE RIGHT_BRACKET RIGHT_PAREN SEMICOLON STRING STRING_CONST THIS TIMES VOID WHILEprogram : decllistdecllist : decl\n                | decllist decldecl : variabledeclvariabledecl : variabletype ID SEMICOLONvariabletype : INT\n                    | DOUBLE\n                    | STRING\n                    | BOOL'
+_lr_signature = 'AND ARRAY BOOL BOOL_CONST BREAK CLASS COMMA COMMENT COMMENT_MULTI DIM DIVIDE DOUBLE DOUBLE_CONST ELSE EQUAL EQUAL_EQUAL EXTENDS FOR GREATER_EQUAL GREATER_THAN ID IDENTIFIER IF IMPLEMENTS INT INTERFACE INT_CONST LEFT_BRACE LEFT_BRACKET LEFT_PAREN LESS_EQUAL LESS_THAN MINUS MODULO NEW NEWARRAY NOT NOT_EQUAL NULL OR PERIOD PLUS PRINT READINTEGER READLINE RETURN RIGHT_BRACE RIGHT_BRACKET RIGHT_PAREN SEMICOLON STRING STRING_CONST THIS TIMES VOID WHILEprogram : decllistdecllist : decl\n                | decllist decldecl : variabledecldecl : statementvariabledecl : variabletype ID SEMICOLONvariabletype : INT\n                    | DOUBLE\n                    | STRING\n                    | BOOLstatement : ID EQUAL expression SEMICOLONexpression : termterm : factorfactor : constfactor : IDconst : INT_CONST\n             | DOUBLE_CONST\n             | STRING_CONST\n             | BOOL_CONSTexpression : expression PLUS termexpression : expression MINUS termterm : term TIMES factorterm : term DIVIDE factorfactor : LEFT_PAREN expression RIGHT_PAREN'
     
-_lr_action_items = {'INT':([0,2,3,4,10,12,],[6,6,-2,-4,-3,-5,]),'DOUBLE':([0,2,3,4,10,12,],[7,7,-2,-4,-3,-5,]),'STRING':([0,2,3,4,10,12,],[8,8,-2,-4,-3,-5,]),'BOOL':([0,2,3,4,10,12,],[9,9,-2,-4,-3,-5,]),'$end':([1,2,3,4,10,12,],[0,-1,-2,-4,-3,-5,]),'ID':([5,6,7,8,9,],[11,-6,-7,-8,-9,]),'SEMICOLON':([11,],[12,]),}
+_lr_action_items = {'ID':([0,2,3,4,5,6,8,9,10,11,12,14,15,21,26,27,28,29,30,],[7,7,-2,-4,-5,13,-7,-8,-9,-10,-3,16,-6,16,-11,16,16,16,16,]),'INT':([0,2,3,4,5,12,15,26,],[8,8,-2,-4,-5,-3,-6,-11,]),'DOUBLE':([0,2,3,4,5,12,15,26,],[9,9,-2,-4,-5,-3,-6,-11,]),'STRING':([0,2,3,4,5,12,15,26,],[10,10,-2,-4,-5,-3,-6,-11,]),'BOOL':([0,2,3,4,5,12,15,26,],[11,11,-2,-4,-5,-3,-6,-11,]),'$end':([1,2,3,4,5,12,15,26,],[0,-1,-2,-4,-5,-3,-6,-11,]),'EQUAL':([7,],[14,]),'SEMICOLON':([13,16,17,18,19,20,22,23,24,25,32,33,34,35,36,],[15,-15,26,-12,-13,-14,-16,-17,-18,-19,-20,-21,-22,-23,-24,]),'LEFT_PAREN':([14,21,27,28,29,30,],[21,21,21,21,21,21,]),'INT_CONST':([14,21,27,28,29,30,],[22,22,22,22,22,22,]),'DOUBLE_CONST':([14,21,27,28,29,30,],[23,23,23,23,23,23,]),'STRING_CONST':([14,21,27,28,29,30,],[24,24,24,24,24,24,]),'BOOL_CONST':([14,21,27,28,29,30,],[25,25,25,25,25,25,]),'TIMES':([16,18,19,20,22,23,24,25,32,33,34,35,36,],[-15,29,-13,-14,-16,-17,-18,-19,29,29,-22,-23,-24,]),'DIVIDE':([16,18,19,20,22,23,24,25,32,33,34,35,36,],[-15,30,-13,-14,-16,-17,-18,-19,30,30,-22,-23,-24,]),'PLUS':([16,17,18,19,20,22,23,24,25,31,32,33,34,35,36,],[-15,27,-12,-13,-14,-16,-17,-18,-19,27,-20,-21,-22,-23,-24,]),'MINUS':([16,17,18,19,20,22,23,24,25,31,32,33,34,35,36,],[-15,28,-12,-13,-14,-16,-17,-18,-19,28,-20,-21,-22,-23,-24,]),'RIGHT_PAREN':([16,18,19,20,22,23,24,25,31,32,33,34,35,36,],[-15,-12,-13,-14,-16,-17,-18,-19,36,-20,-21,-22,-23,-24,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'program':([0,],[1,]),'decllist':([0,],[2,]),'decl':([0,2,],[3,10,]),'variabledecl':([0,2,],[4,4,]),'variabletype':([0,2,],[5,5,]),}
+_lr_goto_items = {'program':([0,],[1,]),'decllist':([0,],[2,]),'decl':([0,2,],[3,12,]),'variabledecl':([0,2,],[4,4,]),'statement':([0,2,],[5,5,]),'variabletype':([0,2,],[6,6,]),'expression':([14,21,],[17,31,]),'term':([14,21,27,28,],[18,18,32,33,]),'factor':([14,21,27,28,29,30,],[19,19,19,19,34,35,]),'const':([14,21,27,28,29,30,],[20,20,20,20,20,20,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -30,10 +30,25 @@ _lr_productions = [
   ('program -> decllist','program',1,'p_program','myparser.py',17),
   ('decllist -> decl','decllist',1,'p_decllist','myparser.py',22),
   ('decllist -> decllist decl','decllist',2,'p_decllist','myparser.py',23),
-  ('decl -> variabledecl','decl',1,'p_decl','myparser.py',31),
-  ('variabledecl -> variabletype ID SEMICOLON','variabledecl',3,'p_variabledecl','myparser.py',36),
+  ('decl -> variabledecl','decl',1,'p_decl_variabledecl','myparser.py',31),
+  ('decl -> statement','decl',1,'p_decl_statement','myparser.py',36),
+  ('variabledecl -> variabletype ID SEMICOLON','variabledecl',3,'p_variabledecl','myparser.py',41),
   ('variabletype -> INT','variabletype',1,'p_variabletype','myparser.py',46),
   ('variabletype -> DOUBLE','variabletype',1,'p_variabletype','myparser.py',47),
   ('variabletype -> STRING','variabletype',1,'p_variabletype','myparser.py',48),
   ('variabletype -> BOOL','variabletype',1,'p_variabletype','myparser.py',49),
+  ('statement -> ID EQUAL expression SEMICOLON','statement',4,'p_statement','myparser.py',55),
+  ('expression -> term','expression',1,'p_expression_term','myparser.py',59),
+  ('term -> factor','term',1,'p_term_factor','myparser.py',64),
+  ('factor -> const','factor',1,'p_factor_number','myparser.py',69),
+  ('factor -> ID','factor',1,'p_factor_id','myparser.py',74),
+  ('const -> INT_CONST','const',1,'p_const','myparser.py',78),
+  ('const -> DOUBLE_CONST','const',1,'p_const','myparser.py',79),
+  ('const -> STRING_CONST','const',1,'p_const','myparser.py',80),
+  ('const -> BOOL_CONST','const',1,'p_const','myparser.py',81),
+  ('expression -> expression PLUS term','expression',3,'p_expression_plus','myparser.py',86),
+  ('expression -> expression MINUS term','expression',3,'p_expression_minus','myparser.py',91),
+  ('term -> term TIMES factor','term',3,'p_term_multiply','myparser.py',96),
+  ('term -> term DIVIDE factor','term',3,'p_term_divide','myparser.py',101),
+  ('factor -> LEFT_PAREN expression RIGHT_PAREN','factor',3,'p_factor_paren','myparser.py',106),
 ]
