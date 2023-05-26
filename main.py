@@ -6,8 +6,11 @@ input_code = '''
 int x;
 bool y;
 y = true;
-
-Print(x);
+y = 3;
+string x;
+double z;
+z = 23.2 + 4.3 * 2.0 / 2.3 + 4.0 * (3.4 + 2.4);
+Print(x - false);
 '''
 
 parse_tree = parser.parse(input_code)

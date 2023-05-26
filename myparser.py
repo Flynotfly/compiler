@@ -5,14 +5,31 @@ from lexer import tokens
 symbol_table = {}
 semantic_errors = 0
 
+quadruples = []
+next_temp = 0
+
+
+def new_temp():
+    global next_temp
+    temp = f"t{next_temp}"
+    next_temp += 1
+    return temp
+
 
 def add_sem_error():
     global semantic_errors
     semantic_errors += 1
 
 
+def new_quadruple(operator, operand1, operand2, result):
+    quadruple = (operator, operand1, operand2, result)
+    quadruples.append(quadruple)
+
+
 class Node:
-    def __init__(self, name, children=[], value=None, type=None):
+    def __init__(self, name, children=None, value=None, type=None):
+        if children is None:
+            children = []
         self.name = name
         self.children = children
         self.value = value
@@ -99,13 +116,11 @@ def p_statement(p):
 
 def p_expression_term(p):
     'expression : term'
-    p[0] = Node('Term', [p[1]], type=p[1].type)
-
+    p[0] = p[1]
 
 def p_term_factor(p):
     'term : factor'
-    p[0] = Node('Factor', [p[1]], type=p[1].type)
-
+    p[0] = p[1]
 
 def p_factor_number(p):
     'factor : const'
@@ -186,7 +201,7 @@ def p_term_divide(p):
 
 def p_factor_paren(p):
     'factor : LEFT_PAREN expression RIGHT_PAREN'
-    p[0] = Node('ParenExp', [p[2]], type=p[2].type)
+    p[0] = p[2]
 
 
 def p_printstatement(p):
