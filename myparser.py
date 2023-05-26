@@ -2,17 +2,25 @@ import ply.yacc as yacc
 from lexer import tokens
 
 
+symbol_table = {}
+
+
 class Node:
-    def __init__(self, type, children=None, value=None):
-        self.type = type
-        self.children = children or []
+    def __init__(self, name, children=[], value=None, type=None):
+        self.name = name
+        self.children = children
         self.value = value
+        self.type = type
 
     def __repr__(self):
-        if self.value == None:
-            return f'{self.type}'
+        if self.value is None and self.type is None:
+            return f'{self.name}'
+        elif self.value and self.type is None:
+            return f'{self.name} = {self.value}'
+        elif self.value is None and self.type:
+            return f'{self.name} [{self.type}]'
         else:
-            return f'{self.value} ({self.type})'
+            return f'{self.name} = {self.value} [{self.type}]'
 
 
 def p_program(p):
@@ -46,7 +54,13 @@ def p_decl_prntstmnt(p):
 
 def p_variabledecl(p):
     'variabledecl : variabletype ID SEMICOLON'
-    p[0] = Node('Variable', [p[1], Node('ID', value=p[2])])
+    p[0] = Node('Variable', [p[1], Node('ID', value=p[2], type=p[1].value.lower())])
+
+    variable_name = p[2]
+    if variable_name in symbol_table:
+        print(f"Semantic error: Variable '{variable_name}' already declared.")
+    else:
+        symbol_table[variable_name] = p[1].value
 
 
 def p_variabletype(p):
@@ -59,16 +73,29 @@ def p_variabletype(p):
 
 def p_statement(p):
     'statement : ID EQUAL expression SEMICOLON'
-    p[0] = Node('IdEqual', [Node('ID', value=p[1]), p[3]])
+
+    variable_name = p[1]
+
+    if variable_name not in symbol_table:
+        print(f"Semantic error: Variable '{variable_name}' is not declared.")
+        p[0] = Node('IdEqual', [Node('ID', value=p[1]), p[3]])
+    else:
+        p[0] = Node('IdEqual', [Node('ID', value=p[1], type=symbol_table[variable_name]), p[3]])
+        assigned_type = symbol_table[variable_name]
+        expression_type = p[3].type
+
+        if assigned_type != expression_type:
+            print(f"Semantic error: Type mismatch in assignment of variable '{variable_name}'.")
+
 
 def p_expression_term(p):
     'expression : term'
-    p[0] = Node('Term', [p[1]])
+    p[0] = Node('Term', [p[1]], type=p[1].type)
 
 
 def p_term_factor(p):
     'term : factor'
-    p[0] = Node('Factor', [p[1]])
+    p[0] = Node('Factor', [p[1]], type=p[1].type)
 
 
 def p_factor_number(p):
@@ -78,44 +105,82 @@ def p_factor_number(p):
 
 def p_factor_id(p):
     'factor : ID'
-    p[0] = Node('ID', value=p[1])
 
-def p_const(p):
-    '''const : INT_CONST
-             | DOUBLE_CONST
-             | STRING_CONST
-             | BOOL_CONST'''
-    p[0] = Node('const', value=p[1])
+    variable_name = p[1]
+    if variable_name not in symbol_table:
+        print(f"Semantic error: Variable '{variable_name}' is not declared.")
+        p[0] = Node('ID', value=p[1])
+    else:
+        p[0] = Node('ID', value=p[1], type=symbol_table[variable_name])
+
+
+def p_const_int(p):
+    'const : INT_CONST'
+    p[0] = Node('const', value=p[1], type='int')
+
+def p_const_double(p):
+    'const : DOUBLE_CONST'
+    p[0] = Node('const', value=p[1], type='double')
+
+def p_const_string(p):
+    'const : STRING_CONST'
+    p[0] = Node('const', value=p[1], type='string')
+
+def p_const_bool(p):
+    'const : BOOL_CONST'
+    p[0] = Node('const', value=p[1], type='bool')
 
 
 def p_expression_plus(p):
     'expression : expression PLUS term'
-    p[0] = Node('PlusExp', [p[1], p[3]])
 
+    if p[1].type == p[3].type and (p[1].type == "int" or p[1].type == "double" or p[1].type == "string"):
+        p[0] = Node('PlusExp', [p[1], p[3]], type=p[1].type)
+    else:
+        print("Semantic error: Unexpected expression type")
+        p[0] = Node('PlusExp', [p[1], p[3]])
 
 def p_expression_minus(p):
     'expression : expression MINUS term'
-    p[0] = Node('MinusExp', [p[1], p[3]])
+
+    if p[1].type == p[3].type and (p[1].type == "int" or p[1].type == "double"):
+        p[0] = Node('MinusExp', [p[1], p[3]], type=p[1].type)
+    else:
+        print("Semantic error: Unexpected expression type")
+        p[0] = Node('MinusExp', [p[1], p[3]])
 
 
 def p_term_multiply(p):
     'term : term TIMES factor'
-    p[0] = Node('MultiplyFactor', [p[1], p[3]])
+
+    if p[1].type == p[3].type and (p[1].type == "int" or p[1].type == "double"):
+        p[0] = Node('MultiplyFactor', [p[1], p[3]], type=p[1].type)
+    else:
+        print("Semantic error: Unexpected expression type")
+        p[0] = Node('MultiplyFactor', [p[1], p[3]])
 
 
 def p_term_divide(p):
     'term : term DIVIDE factor'
-    p[0] = Node('DivideFactor', [p[1], p[3]])
 
+    if p[1].type == p[3].type and (p[1].type == "int" or p[1].type == "double"):
+        p[0] = Node('DivideFactor', [p[1], p[3]], type=p[1].type)
+    else:
+        print("Semantic error: Unexpected expression type")
+        p[0] = Node('DivideFactor', [p[1], p[3]])
 
 def p_factor_paren(p):
     'factor : LEFT_PAREN expression RIGHT_PAREN'
-    p[0] = Node('ParenExp', [p[2]])
+    p[0] = Node('ParenExp', [p[2]], type=p[2].type)
 
 
 def p_printstatement(p):
     'printstatement : PRINT LEFT_PAREN expression RIGHT_PAREN SEMICOLON'
-    p[0] = Node('Print', [p[3]])
+    p[0] = Node('Print', [p[3]], type=p[3].type)
+    if p[3].type is None:
+        print('Semantic error: Unexpected expression type in print statement')
+
+
 def p_error(p):
     if p:
         print(f"Syntax error at token {p.value} on line {p.lineno}")

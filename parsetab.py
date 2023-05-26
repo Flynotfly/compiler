@@ -6,7 +6,7 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'AND ARRAY BOOL BOOL_CONST BREAK CLASS COMMA COMMENT COMMENT_MULTI DIM DIVIDE DOUBLE DOUBLE_CONST ELSE EQUAL EQUAL_EQUAL EXTENDS FOR GREATER_EQUAL GREATER_THAN ID IDENTIFIER IF IMPLEMENTS INT INTERFACE INT_CONST LEFT_BRACE LEFT_BRACKET LEFT_PAREN LESS_EQUAL LESS_THAN MINUS MODULO NEW NEWARRAY NOT NOT_EQUAL NULL OR PERIOD PLUS PRINT READINTEGER READLINE RETURN RIGHT_BRACE RIGHT_BRACKET RIGHT_PAREN SEMICOLON STRING STRING_CONST THIS TIMES VOID WHILEprogram : decllistdecllist : decl\n                | decllist decldecl : variabledecldecl : statementdecl : printstatementvariabledecl : variabletype ID SEMICOLONvariabletype : INT\n                    | DOUBLE\n                    | STRING\n                    | BOOLstatement : ID EQUAL expression SEMICOLONexpression : termterm : factorfactor : constfactor : IDconst : INT_CONST\n             | DOUBLE_CONST\n             | STRING_CONST\n             | BOOL_CONSTexpression : expression PLUS termexpression : expression MINUS termterm : term TIMES factorterm : term DIVIDE factorfactor : LEFT_PAREN expression RIGHT_PARENprintstatement : PRINT LEFT_PAREN expression RIGHT_PAREN SEMICOLON'
+_lr_signature = 'AND ARRAY BOOL BOOL_CONST BREAK CLASS COMMA COMMENT COMMENT_MULTI DIM DIVIDE DOUBLE DOUBLE_CONST ELSE EQUAL EQUAL_EQUAL EXTENDS FOR GREATER_EQUAL GREATER_THAN ID IDENTIFIER IF IMPLEMENTS INT INTERFACE INT_CONST LEFT_BRACE LEFT_BRACKET LEFT_PAREN LESS_EQUAL LESS_THAN MINUS MODULO NEW NEWARRAY NOT NOT_EQUAL NULL OR PERIOD PLUS PRINT READINTEGER READLINE RETURN RIGHT_BRACE RIGHT_BRACKET RIGHT_PAREN SEMICOLON STRING STRING_CONST THIS TIMES VOID WHILEprogram : decllistdecllist : decl\n                | decllist decldecl : variabledecldecl : statementdecl : printstatementvariabledecl : variabletype ID SEMICOLONvariabletype : INT\n                    | DOUBLE\n                    | STRING\n                    | BOOLstatement : ID EQUAL expression SEMICOLONexpression : termterm : factorfactor : constfactor : IDconst : INT_CONSTconst : DOUBLE_CONSTconst : STRING_CONSTconst : BOOL_CONSTexpression : expression PLUS termexpression : expression MINUS termterm : term TIMES factorterm : term DIVIDE factorfactor : LEFT_PAREN expression RIGHT_PARENprintstatement : PRINT LEFT_PAREN expression RIGHT_PAREN SEMICOLON'
     
 _lr_action_items = {'ID':([0,2,3,4,5,6,7,10,11,12,13,14,16,17,18,24,30,31,32,33,34,42,],[8,8,-2,-4,-5,-6,15,-8,-9,-10,-11,-3,19,19,-7,19,-12,19,19,19,19,-26,]),'PRINT':([0,2,3,4,5,6,14,18,30,42,],[9,9,-2,-4,-5,-6,-3,-7,-12,-26,]),'INT':([0,2,3,4,5,6,14,18,30,42,],[10,10,-2,-4,-5,-6,-3,-7,-12,-26,]),'DOUBLE':([0,2,3,4,5,6,14,18,30,42,],[11,11,-2,-4,-5,-6,-3,-7,-12,-26,]),'STRING':([0,2,3,4,5,6,14,18,30,42,],[12,12,-2,-4,-5,-6,-3,-7,-12,-26,]),'BOOL':([0,2,3,4,5,6,14,18,30,42,],[13,13,-2,-4,-5,-6,-3,-7,-12,-26,]),'$end':([1,2,3,4,5,6,14,18,30,42,],[0,-1,-2,-4,-5,-6,-3,-7,-12,-26,]),'EQUAL':([8,],[16,]),'LEFT_PAREN':([9,16,17,24,31,32,33,34,],[17,24,24,24,24,24,24,24,]),'SEMICOLON':([15,19,20,21,22,23,25,26,27,28,36,37,38,39,40,41,],[18,-16,30,-13,-14,-15,-17,-18,-19,-20,42,-21,-22,-23,-24,-25,]),'INT_CONST':([16,17,24,31,32,33,34,],[25,25,25,25,25,25,25,]),'DOUBLE_CONST':([16,17,24,31,32,33,34,],[26,26,26,26,26,26,26,]),'STRING_CONST':([16,17,24,31,32,33,34,],[27,27,27,27,27,27,27,]),'BOOL_CONST':([16,17,24,31,32,33,34,],[28,28,28,28,28,28,28,]),'TIMES':([19,21,22,23,25,26,27,28,37,38,39,40,41,],[-16,33,-14,-15,-17,-18,-19,-20,33,33,-23,-24,-25,]),'DIVIDE':([19,21,22,23,25,26,27,28,37,38,39,40,41,],[-16,34,-14,-15,-17,-18,-19,-20,34,34,-23,-24,-25,]),'PLUS':([19,20,21,22,23,25,26,27,28,29,35,37,38,39,40,41,],[-16,31,-13,-14,-15,-17,-18,-19,-20,31,31,-21,-22,-23,-24,-25,]),'MINUS':([19,20,21,22,23,25,26,27,28,29,35,37,38,39,40,41,],[-16,32,-13,-14,-15,-17,-18,-19,-20,32,32,-21,-22,-23,-24,-25,]),'RIGHT_PAREN':([19,21,22,23,25,26,27,28,29,35,37,38,39,40,41,],[-16,-13,-14,-15,-17,-18,-19,-20,36,41,-21,-22,-23,-24,-25,]),}
 
@@ -27,30 +27,30 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> program","S'",1,None,None,None),
-  ('program -> decllist','program',1,'p_program','myparser.py',17),
-  ('decllist -> decl','decllist',1,'p_decllist','myparser.py',22),
-  ('decllist -> decllist decl','decllist',2,'p_decllist','myparser.py',23),
-  ('decl -> variabledecl','decl',1,'p_decl_variabledecl','myparser.py',31),
-  ('decl -> statement','decl',1,'p_decl_statement','myparser.py',36),
-  ('decl -> printstatement','decl',1,'p_decl_prntstmnt','myparser.py',41),
-  ('variabledecl -> variabletype ID SEMICOLON','variabledecl',3,'p_variabledecl','myparser.py',46),
-  ('variabletype -> INT','variabletype',1,'p_variabletype','myparser.py',51),
-  ('variabletype -> DOUBLE','variabletype',1,'p_variabletype','myparser.py',52),
-  ('variabletype -> STRING','variabletype',1,'p_variabletype','myparser.py',53),
-  ('variabletype -> BOOL','variabletype',1,'p_variabletype','myparser.py',54),
-  ('statement -> ID EQUAL expression SEMICOLON','statement',4,'p_statement','myparser.py',60),
-  ('expression -> term','expression',1,'p_expression_term','myparser.py',64),
-  ('term -> factor','term',1,'p_term_factor','myparser.py',69),
-  ('factor -> const','factor',1,'p_factor_number','myparser.py',74),
-  ('factor -> ID','factor',1,'p_factor_id','myparser.py',79),
-  ('const -> INT_CONST','const',1,'p_const','myparser.py',83),
-  ('const -> DOUBLE_CONST','const',1,'p_const','myparser.py',84),
-  ('const -> STRING_CONST','const',1,'p_const','myparser.py',85),
-  ('const -> BOOL_CONST','const',1,'p_const','myparser.py',86),
-  ('expression -> expression PLUS term','expression',3,'p_expression_plus','myparser.py',91),
-  ('expression -> expression MINUS term','expression',3,'p_expression_minus','myparser.py',96),
-  ('term -> term TIMES factor','term',3,'p_term_multiply','myparser.py',101),
-  ('term -> term DIVIDE factor','term',3,'p_term_divide','myparser.py',106),
-  ('factor -> LEFT_PAREN expression RIGHT_PAREN','factor',3,'p_factor_paren','myparser.py',111),
-  ('printstatement -> PRINT LEFT_PAREN expression RIGHT_PAREN SEMICOLON','printstatement',5,'p_printstatement','myparser.py',116),
+  ('program -> decllist','program',1,'p_program','myparser.py',23),
+  ('decllist -> decl','decllist',1,'p_decllist','myparser.py',28),
+  ('decllist -> decllist decl','decllist',2,'p_decllist','myparser.py',29),
+  ('decl -> variabledecl','decl',1,'p_decl_variabledecl','myparser.py',37),
+  ('decl -> statement','decl',1,'p_decl_statement','myparser.py',42),
+  ('decl -> printstatement','decl',1,'p_decl_prntstmnt','myparser.py',47),
+  ('variabledecl -> variabletype ID SEMICOLON','variabledecl',3,'p_variabledecl','myparser.py',52),
+  ('variabletype -> INT','variabletype',1,'p_variabletype','myparser.py',63),
+  ('variabletype -> DOUBLE','variabletype',1,'p_variabletype','myparser.py',64),
+  ('variabletype -> STRING','variabletype',1,'p_variabletype','myparser.py',65),
+  ('variabletype -> BOOL','variabletype',1,'p_variabletype','myparser.py',66),
+  ('statement -> ID EQUAL expression SEMICOLON','statement',4,'p_statement','myparser.py',71),
+  ('expression -> term','expression',1,'p_expression_term','myparser.py',85),
+  ('term -> factor','term',1,'p_term_factor','myparser.py',90),
+  ('factor -> const','factor',1,'p_factor_number','myparser.py',95),
+  ('factor -> ID','factor',1,'p_factor_id','myparser.py',100),
+  ('const -> INT_CONST','const',1,'p_const_int','myparser.py',109),
+  ('const -> DOUBLE_CONST','const',1,'p_const_double','myparser.py',113),
+  ('const -> STRING_CONST','const',1,'p_const_string','myparser.py',117),
+  ('const -> BOOL_CONST','const',1,'p_const_bool','myparser.py',121),
+  ('expression -> expression PLUS term','expression',3,'p_expression_plus','myparser.py',126),
+  ('expression -> expression MINUS term','expression',3,'p_expression_minus','myparser.py',131),
+  ('term -> term TIMES factor','term',3,'p_term_multiply','myparser.py',136),
+  ('term -> term DIVIDE factor','term',3,'p_term_divide','myparser.py',141),
+  ('factor -> LEFT_PAREN expression RIGHT_PAREN','factor',3,'p_factor_paren','myparser.py',146),
+  ('printstatement -> PRINT LEFT_PAREN expression RIGHT_PAREN SEMICOLON','printstatement',5,'p_printstatement','myparser.py',151),
 ]
