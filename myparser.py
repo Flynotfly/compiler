@@ -47,7 +47,7 @@ class Node:
 
 
 def p_program(p):
-    '''program : decllist'''
+    'program : decllist'
     p[0] = p[1]
 
 
@@ -86,6 +86,8 @@ def p_variabledecl(p):
     else:
         symbol_table[variable_name] = p[1].value
 
+    new_quadruple("Declare", p[1].value, None, p[2])
+
 
 def p_variabletype(p):
     '''variabletype : INT
@@ -113,14 +115,18 @@ def p_statement(p):
             print(f"Semantic error: Type mismatch in assignment of variable '{variable_name}'.")
             add_sem_error()
 
+    new_quadruple("=", p[3].value, None, p[1])
+
 
 def p_expression_term(p):
     'expression : term'
     p[0] = p[1]
 
+
 def p_term_factor(p):
     'term : factor'
     p[0] = p[1]
+
 
 def p_factor_number(p):
     'factor : const'
@@ -143,13 +149,16 @@ def p_const_int(p):
     'const : INT_CONST'
     p[0] = Node('const', value=p[1], type='int')
 
+
 def p_const_double(p):
     'const : DOUBLE_CONST'
     p[0] = Node('const', value=p[1], type='double')
 
+
 def p_const_string(p):
     'const : STRING_CONST'
     p[0] = Node('const', value=p[1], type='string')
+
 
 def p_const_bool(p):
     'const : BOOL_CONST'
@@ -160,44 +169,61 @@ def p_expression_plus(p):
     'expression : expression PLUS term'
 
     if p[1].type == p[3].type and (p[1].type == "int" or p[1].type == "double" or p[1].type == "string"):
-        p[0] = Node('PlusExp', [p[1], p[3]], type=p[1].type)
+        p[0] = Node('Plus', [p[1], p[3]], type=p[1].type)
     else:
         print("Semantic error: Unexpected expression type")
         add_sem_error()
-        p[0] = Node('PlusExp', [p[1], p[3]])
+        p[0] = Node('Plus', [p[1], p[3]])
+
+    result = new_temp()
+    p[0].value = result
+    new_quadruple("+", p[1].value, p[3].value, result)
 
 
 def p_expression_minus(p):
     'expression : expression MINUS term'
 
     if p[1].type == p[3].type and (p[1].type == "int" or p[1].type == "double"):
-        p[0] = Node('MinusExp', [p[1], p[3]], type=p[1].type)
+        p[0] = Node('Minus', [p[1], p[3]], type=p[1].type)
     else:
         print("Semantic error: Unexpected expression type")
         add_sem_error()
-        p[0] = Node('MinusExp', [p[1], p[3]])
+        p[0] = Node('Minus', [p[1], p[3]])
+
+    result = new_temp()
+    p[0].value = result
+    new_quadruple("-", p[1].value, p[3].value, result)
 
 
 def p_term_multiply(p):
     'term : term TIMES factor'
 
     if p[1].type == p[3].type and (p[1].type == "int" or p[1].type == "double"):
-        p[0] = Node('MultiplyFactor', [p[1], p[3]], type=p[1].type)
+        p[0] = Node('Multiply', [p[1], p[3]], type=p[1].type)
     else:
         print("Semantic error: Unexpected expression type")
         add_sem_error()
-        p[0] = Node('MultiplyFactor', [p[1], p[3]])
+        p[0] = Node('Multiply', [p[1], p[3]])
+
+    result = new_temp()
+    p[0].value = result
+    new_quadruple("*", p[1].value, p[3].value, result)
 
 
 def p_term_divide(p):
     'term : term DIVIDE factor'
 
     if p[1].type == p[3].type and (p[1].type == "int" or p[1].type == "double"):
-        p[0] = Node('DivideFactor', [p[1], p[3]], type=p[1].type)
+        p[0] = Node('Divide', [p[1], p[3]], type=p[1].type)
     else:
         print("Semantic error: Unexpected expression type")
         add_sem_error()
-        p[0] = Node('DivideFactor', [p[1], p[3]])
+        p[0] = Node('Divide', [p[1], p[3]])
+
+    result = new_temp()
+    p[0].value = result
+    new_quadruple("/", p[1].value, p[3].value, result)
+
 
 def p_factor_paren(p):
     'factor : LEFT_PAREN expression RIGHT_PAREN'
@@ -210,6 +236,8 @@ def p_printstatement(p):
     if p[3].type is None:
         print('Semantic error: Unexpected expression type in print statement')
         add_sem_error()
+
+    new_quadruple("Print", p[3].value, None, None)
 
 
 def p_error(p):
